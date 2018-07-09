@@ -13,4 +13,4 @@ sudo docker run --name [CONTAINER_NAME] -d -p [PORT]:80 [IMAGE_TAG]
 curl -F file=@[FILE_PATH] -F remark="REMARK" [SERVER_URL]:[PORT]/file/upload/
 
 ### ダウンロード
-curl [SERVER_URL]:[PORT]/media/[FILE_NAME]
+wget [SERVER_URL]:[PORT]/media/[FILE_NAME]
