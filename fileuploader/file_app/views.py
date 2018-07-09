@@ -13,14 +13,17 @@ class FileView(APIView):
   def post(self, request, *args, **kwargs):
     file_serializer = FileSerializer(data=request.data)
     if file_serializer.is_valid():
-      file_path = os.path.join(settings.MEDIA_ROOT, str(request.data['file']))
+      file_name = str(request.data['file'])
+      file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+
       if os.path.exists(file_path):
         os.remove(file_path)
 
       file_serializer.save()
-      if os.path.splitext(file_path)[1] == '.zip':
+      splitext = os.path.splitext(file_name)
+      if splitext[1] == '.zip':
         with zipfile.ZipFile(file_path, 'r') as zf:
-          zf.extractall(path=settings.MEDIA_ROOT)
+          zf.extractall(path=os.path.join(settings.MEDIA_ROOT, splitext[0]))
       return Response(file_serializer.data, status=status.HTTP_201_CREATED)
     else:
       return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
